@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ayomide Afolalu — Web Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0a;
+  --white: #f8f5ff;
+  --purple: #7c3aed;
+  --cyan: #06d6f0;
+  --yellow: #ffe040;
+  --pink: #ff3d9a;
+  --green: #00e5a0;
+  --muted: #555;
+  --card: #111;
+  --border: rgba(255,255,255,0.07);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Space Mono', monospace;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Cursor */
+.cursor {
+  position: fixed;
+  width: 14px; height: 14px;
+  background: var(--cyan);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width .2s, height .2s, background .2s;
+  mix-blend-mode: screen;
+}
+.cursor-ring {
+  position: fixed;
+  width: 44px; height: 44px;
+  border: 1.5px solid var(--purple);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: transform .15s ease-out, width .3s, height .3s;
+  opacity: 0.6;
+}
+
+/* Noise */
+body::after {
+  content:'';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9990;
+}
+
+/* ── HEADER ── */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 3rem;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  color: var(--white);
+}
+.logo span { color: var(--cyan); }
+
+nav { display: flex; gap: 2rem; align-items: center; }
+nav a {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(248,245,255,0.5);
+  text-decoration: none;
+  transition: color .2s;
+}
+nav a:hover { color: var(--cyan); }
+
+.nav-pill {
+  background: var(--purple);
+  color: var(--white) !important;
+  padding: .55rem 1.3rem;
+  border-radius: 999px;
+  font-size: 0.65rem !important;
+  letter-spacing: 0.1em;
+  transition: background .2s !important;
+}
+.nav-pill:hover { background: var(--pink) !important; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 8rem 3rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gradient blobs */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.18;
+  pointer-events: none;
+  animation: float 10s ease-in-out infinite;
+}
+.blob-1 { width: 500px; height: 500px; background: var(--purple); top: -100px; right: -100px; animation-delay: 0s; }
+.blob-2 { width: 400px; height: 400px; background: var(--cyan); bottom: 0; left: -80px; animation-delay: -4s; }
+.blob-3 { width: 300px; height: 300px; background: var(--pink); top: 30%; right: 20%; animation-delay: -7s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+
+/* grid lines */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: rgba(6,214,240,0.1);
+  border: 1px solid rgba(6,214,240,0.25);
+  border-radius: 999px;
+  padding: .4rem 1rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  width: fit-content;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp .7s .2s forwards;
+}
+.hero-tag-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(1.4); }
+}
+
+.hero-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(3.5rem, 8vw, 9rem);
+  line-height: .95;
+  letter-spacing: -0.03em;
+  opacity: 0;
+  animation: fadeUp .7s .35s forwards;
+}
+
+.hero-name .line2 {
+  display: block;
+  -webkit-text-stroke: 2px var(--purple);
+  color: transparent;
+}
+
+.hero-name .accent { color: var(--yellow); }
+
+.hero-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 3rem;
+  opacity: 0;
+  animation: fadeUp .7s .55s forwards;
+}
+
+.hero-desc {
+  max-width: 420px;
+  font-size: 0.78rem;
+  line-height: 1.85;
+  color: rgba(248,245,255,0.55);
+}
+.hero-desc strong { color: var(--white); font-weight: 400; }
+
+.hero-ctas { display: flex; gap: 1rem; align-items: center; }
+
+.btn-glow {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--cyan);
+  color: #000;
+  padding: .9rem 2rem;
+  border: none;
+  text-decoration: none;
+  cursor: none;
+  box-shadow: 0 0 30px rgba(6,214,240,0.4);
+  transition: box-shadow .3s, transform .2s;
+  display: inline-block;
+}
+.btn-glow:hover { box-shadow: 0 0 50px rgba(6,214,240,0.7); transform: translateY(-2px); }
+
+.btn-outline {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--white);
+  padding: .9rem 2rem;
+  border: 1px solid rgba(255,255,255,0.2);
+  text-decoration: none;
+  transition: border-color .2s, color .2s;
+  display: inline-block;
+  cursor: none;
+}
+.btn-outline:hover { border-color: var(--purple); color: var(--purple); }
+
+.scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(248,245,255,0.3);
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: fadeUp .7s .9s both;
+}
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, var(--purple));
+  animation: scrollLine 2s ease-in-out infinite;
+}
+
+@keyframes scrollLine {
+  0%, 100% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+/* ── MARQUEE ── */
+.marquee-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(90deg, var(--purple), var(--pink), var(--cyan), var(--purple));
+  background-size: 200% 100%;
+  animation: gradientMove 5s linear infinite;
+  padding: .8rem 0;
+}
+
+@keyframes gradientMove {
+  from { background-position: 0% 0%; }
+  to   { background-position: 200% 0%; }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 18s linear infinite;
+}
+.marquee-item {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #000;
+  font-weight: 700;
+  padding: 0 2.5rem;
+  white-space: nowrap;
+}
+
+/* ── STACK ── */
+.section { padding: 6rem 3rem; }
+
+.section-eyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: .75rem;
+}
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 3.5rem;
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1px;
+  border: 1px solid var(--border);
+  background: var(--border);
+}
+
+.tech-card {
+  background: var(--card);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  transition: background .25s;
+  position: relative;
+  overflow: hidden;
+}
+.tech-card:hover { background: #1a1a1a; }
+.tech-card:hover .tech-dot { transform: scale(3); opacity: .12; }
+
+.tech-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  transition: transform .4s, opacity .4s;
+  flex-shrink: 0;
+}
+
+.tech-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: .85rem;
+}
+
+.tech-type {
+  font-size: .6rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(248,245,255,0.35);
+}
+
+/* ── PROJECTS ── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.project-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+  transition: border-color .3s, transform .3s;
+}
+.project-card:hover {
+  border-color: rgba(124,58,237,0.5);
+  transform: translateY(-4px);
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent, var(--purple));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .4s;
+}
+.project-card:hover::before { transform: scaleX(1); }
+
+.project-num {
+  font-size: .6rem;
+  letter-spacing: .15em;
+  color: rgba(248,245,255,0.2);
+  margin-bottom: 1.5rem;
+}
+
+.project-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: .75rem;
+  letter-spacing: -.01em;
+}
+
+.project-desc {
+  font-size: .72rem;
+  line-height: 1.8;
+  color: rgba(248,245,255,0.5);
+  margin-bottom: 1.5rem;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1.5rem;
+}
+.project-tag {
+  font-size: .58rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: .3rem .7rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  color: rgba(248,245,255,0.5);
+}
+
+.project-arrow {
+  font-size: 1rem;
+  color: var(--accent, var(--purple));
+  transition: transform .3s;
+  display: inline-block;
+}
+.project-card:hover .project-arrow { transform: translate(4px, -4px); }
+
+/* ── ABOUT ── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.about-text {
+  font-size: .85rem;
+  line-height: 2;
+  color: rgba(248,245,255,0.65);
+}
+
+.about-text strong { color: var(--white); }
+.about-highlight { color: var(--cyan); }
+
+.about-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  transition: background .2s;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row:hover { background: rgba(255,255,255,0.03); }
+
+.detail-label {
+  font-size: .6rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: rgba(248,245,255,0.3);
+}
+.detail-value {
+  font-family: 'Syne', sans-serif;
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--white);
+  text-align: right;
+}
+.detail-value.cyan { color: var(--cyan); }
+.detail-value.yellow { color: var(--yellow); }
+.detail-value.green { color: var(--green); }
+
+/* ── CONTACT ── */
+.contact-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.contact-big {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+}
+.contact-big .c1 { color: var(--purple); }
+.contact-big .c2 { color: var(--cyan); }
+.contact-big .c3 { color: var(--yellow); }
+
+.contact-email {
+  display: inline-block;
+  margin-top: 1.5rem;
+  font-size: .75rem;
+  color: rgba(248,245,255,0.5);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(248,245,255,0.15);
+  padding-bottom: 2px;
+  transition: color .2s, border-color .2s;
+  word-break: break-all;
+}
+.contact-email:hover { color: var(--cyan); border-color: var(--cyan); }
+
+.contact-form { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.f-label {
+  font-size: .58rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: rgba(248,245,255,0.35);
+  display: block;
+  margin-bottom: .4rem;
+}
+
+.f-input {
+  width: 100%;
+  font-family: 'Space Mono', monospace;
+  font-size: .75rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  padding: .8rem 1rem;
+  color: var(--white);
+  outline: none;
+  transition: border-color .2s, background .2s;
+  cursor: none;
+}
+.f-input:focus { border-color: var(--purple); background: rgba(124,58,237,0.05); }
+.f-input::placeholder { color: rgba(248,245,255,0.15); }
+textarea.f-input { resize: none; min-height: 100px; }
+
+.f-btn {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: .8rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: var(--white);
+  border: none;
+  padding: 1rem 2.5rem;
+  cursor: none;
+  align-self: flex-start;
+  transition: opacity .2s, transform .2s;
+  box-shadow: 0 0 40px rgba(124,58,237,0.35);
+}
+.f-btn:hover { opacity: .85; transform: translateY(-2px); }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+footer span { font-size: .6rem; letter-spacing: .1em; color: rgba(248,245,255,0.25); }
+.footer-links { display: flex; gap: 2rem; }
+.footer-links a {
+  font-size: .6rem;
+  letter-spacing: .1em;
+  color: rgba(248,245,255,0.25);
+  text-decoration: none;
+  transition: color .2s;
+}
+.footer-links a:hover { color: var(--cyan); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">AYO<span>.</span>DEV</a>
+  <nav>
+    <a href="#stack">Stack</a>
+    <a href="#projects">Projects</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="nav-pill">Hire me</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="hero-tag">
+    <span class="hero-tag-dot"></span>
+    Available for work · Edmonton, CA
+  </div>
+
+  <h1 class="hero-name">
+    AYOMIDE<br/>
+    <span class="line2">AFOLA<span class="accent">LU</span></span>
+  </h1>
+
+  <div class="hero-bottom">
+    <p class="hero-desc">
+      <strong>Web Developer & UI Builder.</strong><br/>
+      I create web applications, software, and user interfaces using modern technologies. Student developer working toward a tech career — building real-world projects every day.
+    </p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn-glow">View Projects</a>
+      <a href="https://github.com/Ayomide780" target="_blank" class="btn-outline">GitHub ↗</a>
+      <a href="https://www.linkedin.com/in/ayomideafolalu/" target="_blank" class="btn-outline" style="border-color:rgba(10,102,194,0.5);color:#0a66c2">LinkedIn ↗</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="mtrack"></div>
+</div>
+
+<!-- STACK -->
+<section class="section" id="stack">
+  <div class="reveal">
+    <p class="section-eyebrow" style="color:var(--cyan)">// Tech Stack</p>
+    <h2 class="section-title">What I build with</h2>
+  </div>
+  <div class="tech-grid reveal">
+    <div class="tech-card"><div class="tech-dot" style="background:var(--yellow)"></div><div class="tech-name">HTML5</div><div class="tech-type">Markup</div></div>
+    <div class="tech-card"><div class="tech-dot" style="background:var(--cyan)"></div><div class="tech-name">CSS3</div><div class="tech-type">Styling</div></div>
+    <div class="tech-card"><div class="tech-dot" style="background:var(--yellow)"></div><div class="tech-name">JavaScript</div><div class="tech-type">Language</div></div>
+    <div class="tech-card"><div class="tech-dot" style="background:var(--cyan)"></div><div class="tech-name">React</div><div class="tech-type">Framework</div></div>
+    <div class="tech-card"><div class="tech-dot" style="background:var(--purple)"></div><div class="tech-name">TypeScript</div><div class="tech-type">Language</div></div>
+    <div class="tech-card"><div class="tech-dot" style="background:var(--green)"></div><div class="tech-name">Node.js</div><div class="tech-type">Backend</div></div>
+    <div class="tech-card"><div class="tech-dot" style="background:var(--pink)"></div><div class="tech-name">Git</div><div class="tech-type">Version Control</div></div>
+    <div class="tech-card"><div class="tech-dot" style="background:var(--purple)"></div><div class="tech-name">Figma</div><div class="tech-type">UI Design</div></div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section" id="projects" style="padding-top:0">
+  <div class="reveal">
+    <p class="section-eyebrow" style="color:var(--pink)">// Projects</p>
+    <h2 class="section-title">Things I've built</h2>
+  </div>
+  <div class="projects-grid reveal">
+    <div class="project-card" style="--accent:var(--cyan)">
+      <p class="project-num">001</p>
+      <h3 class="project-title">Portfolio Site</h3>
+      <p class="project-desc">A fast, responsive personal portfolio to showcase my skills and projects. Built with clean code and bold UI.</p>
+      <div class="project-tags"><span class="project-tag">HTML</span><span class="project-tag">CSS</span><span class="project-tag">JS</span></div>
+      <span class="project-arrow">↗</span>
+    </div>
+    <div class="project-card" style="--accent:var(--purple)">
+      <p class="project-num">002</p>
+      <h3 class="project-title">Task Manager App</h3>
+      <p class="project-desc">A full-featured task management web app with real-time updates, drag-and-drop, and local persistence.</p>
+      <div class="project-tags"><span class="project-tag">React</span><span class="project-tag">TypeScript</span><span class="project-tag">CSS</span></div>
+      <span class="project-arrow">↗</span>
+    </div>
+    <div class="project-card" style="--accent:var(--yellow)">
+      <p class="project-num">003</p>
+      <h3 class="project-title">Weather Dashboard</h3>
+      <p class="project-desc">Live weather app fetching real-time data from public APIs, with dynamic visuals and 5-day forecasts.</p>
+      <div class="project-tags"><span class="project-tag">JavaScript</span><span class="project-tag">REST API</span><span class="project-tag">CSS</span></div>
+      <span class="project-arrow">↗</span>
+    </div>
+    <div class="project-card" style="--accent:var(--green)">
+      <p class="project-num">004</p>
+      <h3 class="project-title">Coming Soon</h3>
+      <p class="project-desc">Something big is in progress. Always building, always learning — the next project drops soon.</p>
+      <div class="project-tags"><span class="project-tag">In Progress</span></div>
+      <span class="project-arrow" style="color:var(--green)">⟳</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about" style="padding-top:0">
+  <div class="reveal">
+    <p class="section-eyebrow" style="color:var(--yellow)">// About Me</p>
+    <h2 class="section-title">The person behind the code</h2>
+  </div>
+  <div class="about-grid reveal">
+    <div>
+      <p class="about-text">
+        Hey! I'm <strong>Ayomide Afolalu</strong>, a <span class="about-highlight">student web developer</span> based in <strong>Edmonton, Canada</strong>. I'm passionate about building things for the web — from clean, intuitive user interfaces to functional full-stack applications.<br/><br/>
+        I'm constantly <strong>leveling up my skills</strong>, working on real-world projects, and pushing toward a full-time career in tech. I believe great code and great design go hand in hand, and I try to bring both to everything I build.
+      </p>
+    </div>
+    <div class="about-details">
+      <div class="detail-row">
+        <span class="detail-label">Name</span>
+        <span class="detail-value">Ayomide Afolalu</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Location</span>
+        <span class="detail-value cyan">Edmonton, Canada 🇨🇦</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Role</span>
+        <span class="detail-value">Web Developer</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Status</span>
+        <span class="detail-value green">Open to work ✓</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Focus</span>
+        <span class="detail-value yellow">Frontend + UI</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">GitHub</span>
+        <a href="https://github.com/Ayomide780" target="_blank" class="detail-value cyan" style="text-decoration:none">github.com/Ayomide780</a>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">LinkedIn</span>
+        <a href="https://www.linkedin.com/in/ayomideafolalu/" target="_blank" class="detail-value" style="text-decoration:none;color:var(--purple);font-size:.65rem">linkedin.com/in/ayomideafolalu</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact" style="padding-top:0">
+  <div class="contact-wrap reveal">
+    <div>
+      <p class="section-eyebrow" style="color:var(--purple)">// Contact</p>
+      <h2 class="contact-big">
+        Let's<br/>
+        <span class="c1">build</span><br/>
+        <span class="c2">something</span><br/>
+        <span class="c3">great.</span>
+      </h2>
+      <a href="mailto:afolaluayomide5@gmail.com" class="contact-email">afolaluayomide5@gmail.com</a>
+    </div>
+    <form class="contact-form" onsubmit="return false;">
+      <div>
+        <label class="f-label">Your name</label>
+        <input class="f-input" type="text" placeholder="John Doe"/>
+      </div>
+      <div>
+        <label class="f-label">Email</label>
+        <input class="f-input" type="email" placeholder="john@email.com"/>
+      </div>
+      <div>
+        <label class="f-label">Message</label>
+        <textarea class="f-input" placeholder="Tell me about your project or opportunity..."></textarea>
+      </div>
+      <button class="f-btn">Send it →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2024 Ayomide Afolalu — Built with 🔥</span>
+  <div class="footer-links">
+    <a href="https://github.com/Ayomide780" target="_blank">GitHub</a>
+    <a href="https://www.linkedin.com/in/ayomideafolalu/" target="_blank">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+// Cursor
+const cur = document.getElementById('cursor');
+const rng = document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+(function anim(){
+  rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+  rng.style.left=rx+'px'; rng.style.top=ry+'px';
+  requestAnimationFrame(anim);
+})();
+document.querySelectorAll('a,button,.project-card,.tech-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    cur.style.width='22px'; cur.style.height='22px';
+    cur.style.background='var(--pink)';
+    rng.style.width='60px'; rng.style.height='60px';
+  });
+  el.addEventListener('mouseleave',()=>{
+    cur.style.width='14px'; cur.style.height='14px';
+    cur.style.background='var(--cyan)';
+    rng.style.width='44px'; rng.style.height='44px';
+  });
+});
+
+// Marquee
+const words = ['HTML','✦','CSS','✦','JavaScript','✦','React','✦','TypeScript','✦','Node.js','✦','Web Dev','✦','Edmonton','✦','Open to Work','✦'];
+const t = document.getElementById('mtrack');
+[...words,...words].forEach(w=>{
+  const s=document.createElement('span');
+  s.className='marquee-item';
+  s.textContent=w;
+  t.appendChild(s);
+});
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
