@@ -593,6 +593,60 @@ footer span { font-size: .6rem; letter-spacing: .1em; color: rgba(248,245,255,0.
 }
 .footer-links a:hover { color: var(--cyan); }
 
+/* ── MOBILE RESPONSIVE ── */
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none; }
+
+  header {
+    padding: 1rem 1.5rem;
+    flex-wrap: wrap;
+    gap: .75rem;
+  }
+  nav { gap: 1rem; flex-wrap: wrap; }
+  nav a { font-size: .6rem; }
+  .nav-pill { padding: .45rem 1rem; }
+
+  .hero {
+    padding: 7rem 1.5rem 5rem;
+    min-height: 100svh;
+  }
+  .hero-name { font-size: clamp(2.8rem, 13vw, 5rem); }
+  .hero-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+  .hero-desc { max-width: 100%; font-size: .72rem; }
+  .hero-ctas { flex-direction: column; width: 100%; }
+  .btn-glow, .btn-outline { text-align: center; width: 100%; padding: .9rem 1rem; }
+
+  .section { padding: 4rem 1.5rem; }
+  .tech-grid { grid-template-columns: repeat(2, 1fr); }
+  .projects-grid { grid-template-columns: 1fr; }
+  .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+
+  .contact-wrap {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding: 2.5rem 1.5rem;
+  }
+  .contact-big { font-size: clamp(2rem, 10vw, 3rem); }
+
+  footer {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  .footer-links { justify-content: center; }
+}
+
+@media (max-width: 480px) {
+  .hero-name { font-size: clamp(2.2rem, 12vw, 3.5rem); }
+  nav { gap: .6rem; }
+}
+
 /* ── ANIMATIONS ── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(28px); }
@@ -779,7 +833,7 @@ footer span { font-size: .6rem; letter-spacing: .1em; color: rgba(248,245,255,0.
         <span class="c2">something</span><br/>
         <span class="c3">great.</span>
       </h2>
-      <a href="mailto:afolaluayomide5@gmail.com" class="contact-email">afolaluayomide5@gmail.com</a>
+      <a href="/cdn-cgi/l/email-protection#6203040d0e030e17031b0d0f0b06075722050f030b0e4c010d0f" class="contact-email"><span class="__cf_email__" data-cfemail="4322252c2f222f36223a2c2e2a27267603242e222a2f6d202c2e">[email&#160;protected]</span></a>
     </div>
     <form class="contact-form" onsubmit="return false;">
       <div>
@@ -808,7 +862,7 @@ footer span { font-size: .6rem; letter-spacing: .1em; color: rgba(248,245,255,0.
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Cursor
 const cur = document.getElementById('cursor');
 const rng = document.getElementById('ring');
@@ -845,11 +899,4 @@ const t = document.getElementById('mtrack');
   t.appendChild(s);
 });
 
-// Scroll reveal
-const obs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
-},{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-</script>
-</body>
-</html>
+// Sc
